@@ -23,11 +23,12 @@ const store = new MongoDBStore({
 const csrfProtection = csrf();
 
 const fileStorage = multer.diskStorage({
+  //storage for images
   destination: (req, file, cb) => {
     cb(null, "images");
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + "-" + file.originalname);
+    cb(null, new Date().toISOString() + "-" + file.originalname); //2020-03-04T13:20:04.217Z-Product_Lg_Type
   }
 });
 
@@ -37,9 +38,9 @@ const fileFilter = (req, file, cb) => {
     file.mimetype === "image/jpg" ||
     file.mimetype === "image/jpeg"
   ) {
-    cb(null, true);
+    cb(null, true); //store
   } else {
-    cb(null, false);
+    cb(null, false); //don't store
   }
 };
 
@@ -52,10 +53,10 @@ const authRoutes = require("./routes/auth");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image") //input name="image"
 );
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/images", express.static(path.join(__dirname, "images")));
+app.use("/images", express.static(path.join(__dirname, "images"))); //static directory name
 app.use(
   session({
     secret: "my secret",
